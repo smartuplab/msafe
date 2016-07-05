@@ -1,4 +1,5 @@
-This is the Raspbian Jessie based image for Raspberry Pi 3 that can be used to bootstrap the MSafe IoT broker
+This is the link to the Raspbian Jessie based image for Raspberry Pi 3 that can be used to bootstrap the MSafe IoT broker
+https://liuc.sharepoint.com/SmartUp/_layouts/15/guestaccess.aspx?guestaccesstoken=P23YRIOEQP6uIW7Rc5pOoEK5Ug4ndd5p4HKMXmHFeOA%3d&docid=092c1a3e0368d47a386a6b2431422f50a
 
 It comes with this pre-installed set of packages:
 - Node-RED (default Raspbian Jessie package) + additional nodes (MySQL, Freedboard) - port 1880
