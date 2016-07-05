@@ -1,11 +1,13 @@
 This is the Raspbian Jessie based image for Raspberry Pi 3 that can be used to bootstrap the MSafe IoT broker
 
+Static IP 192.168.0.50
+
 It comes with this pre-installed set of packages:
 - Node-RED (default Raspbian Jessie package) + additional nodes (MySQL, Freedboard) - port 1880
 - Mosquitto MQTT Broker - port 1883
 - MySQL server - port 3306
 
-Raspbian root access is the default 
+Raspbian Jessie root access is the default 
 user: pi
 password: raspberry
 
