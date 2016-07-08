@@ -4,6 +4,8 @@
 #include <WiFi.h>
 #include <dht.h>
 #include <SoftwareSerial.h>
+#include <Wire.h>
+#include "MutichannelGasSensor.h"
 
 #define humiture_pin A1 //collegare il sensore DHT11 o simile al pin A1 dello yun
 #define MQTT_SERVER "192.168.0.50"
@@ -14,6 +16,9 @@ dht DHT;
 YunClient yun;
 SoftwareSerial mySerial(10,11); //rxout su pin 11 txout su pin10
 
+float ammoniaca;
+float MonDiCarb;
+float BioDiAz;
 double lum;
 double e=2.7182818284590452354;
 double humidity;
@@ -40,6 +45,7 @@ void setup()
   //while (!Serial) {
     ; // Necessario solo se si vuole visualizzare qualcosa sulla seriale
   //}
+  mutichannelGasSensor.begin(0x04);
   pinMode(10,INPUT);
   pinMode(11,OUTPUT);
   //Aspetto che il sensore sia pronto - Il datasheet dice ha ha bisogno di 3 minuti per essere pronto. 
@@ -50,7 +56,9 @@ void setup()
   //Serial.println("Connecting...");
   Bridge.begin();
   sendcommand(calibrate);
+  mutichannelGasSensor.doCalibrate();
  delay(180000);
+ mutichannelGasSensor.powerOn();
 }
 
 void loop()
@@ -99,14 +107,35 @@ void loop()
       c.toCharArray(charCo2,10);
       mqtt.publish("co2-2",charCo2);
       
-   } else {
+    } else {
       //Probabilmente è i cavi solo collegati male. Lo comunico sul serial monitor
       Serial.println("Double check wiring");
     }
-
-   delay(1000);  
-
-
+    delay(1000);
+      
+    //reading NH3
+    ammoniaca= mutichannelGasSensor.measure_NH3();
+    String ammonia =String(ammoniaca);
+    char charNH3[10];
+    ammonia.toCharArray(charNH3,10);
+    mqtt.publish("nh3-2",charNH3);
+    delay(1000);
+    
+    //reading NO2
+    BioDiAz = mutichannelGasSensor.measure_NO2();
+    String nox =String(BioDiAz);
+    char charNO2[10];
+    nox.toCharArray(charNO2,10);
+    mqtt.publish("no2-2",charNO2);
+    delay(1000);
+    
+    //reading CO
+    MonDiCarb = mutichannelGasSensor.measure_CO();
+    String carb_mon =String(MonDiCarb);
+    char charCO[10];
+    carb_mon.toCharArray(charCO,10);
+    mqtt.publish("co-2",charCO);
+    delay(1000);
     
   }
   delay(4000);              
